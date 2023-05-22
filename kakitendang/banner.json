@@ -1,0 +1,24 @@
+{
+    "banners": [
+        {
+            "image_url": "https://www.footlocker.id/media/weltpixel/owlcarouselslider/images/v/a/vans_banner_desktop_copy.jpg",
+            "link": "https://www.footlocker.id/vans.html",
+            "brand": "Vans"
+        },
+        {
+            "image_url": "https://www.footlocker.id/media/weltpixel/owlcarouselslider/images/2/3/2339x1000_57.jpg",
+            "link": "https://www.footlocker.id/promo/mid-year-sale.html",
+            "brand": "MIDYEAR SALE 18-28 MAY"
+        },
+        {
+            "image_url": "https://www.footlocker.id/media/weltpixel/owlcarouselslider/images/2/3/2339x1000_55.jpg",
+            "link": "https://www.footlocker.id/grey-day-2023",
+            "brand": "NB Grey Day"
+        },
+        {
+            "image_url": "https://www.footlocker.id/media/weltpixel/owlcarouselslider/images/d/e/desktop_blackpink_copy_1.jpg",
+            "link": "https://www.footlocker.id/adidas-home-of-classics.html",
+            "brand": "adidas home classic black pink"
+        }
+    ]
+}

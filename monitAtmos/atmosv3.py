@@ -308,17 +308,18 @@ def run_without_proxy():
 def main():
     print("1. Run with Proxy")
     print("2. Run without Proxy")
-    print("3. Quit")  # Tambahkan opsi keluar
     option = input("Pilih opsi: ")
 
     if option == "1":
         run_with_proxy()
     elif option == "2":
         run_without_proxy()
-    elif option == "3":
-        return  # Keluar dari fungsi main() untuk menghentikan program
     else:
         print("Opsi yang Anda pilih tidak valid.")
+
+    # Menunggu tombol enter ditekan untuk menghentikan monitor mode
+    input("Tekan enter untuk menghentikan monitor mode...")
+    sys.exit(0)
 
 
 if __name__ == '__main__':

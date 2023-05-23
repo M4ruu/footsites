@@ -7,7 +7,7 @@ from itertools import cycle
 import random
 import time
 import sys
-import threading
+import keyboard
 
 url = 'https://atmos.co.id/products.json?limit=250'
 discord_webhook_url = 'https://discord.com/api/webhooks/1109907397776003232/RPsTNW21a-58LFoy8VJ_1WzQkGRZgXr1CIG52R4gQVcyjy_gSoUnkEAfSG_MLR5mLxMF'
@@ -306,10 +306,11 @@ def run_without_proxy():
         except requests.exceptions.RequestException as e:
             print('Terjadi kesalahan saat melakukan request:', str(e))
 
-def stop_monitor_mode():
-    input("Tekan enter untuk menghentikan monitor mode...")
-    # Hentikan monitor mode di sini
-    print("Monitor mode telah dihentikan.")
+def stop_monitor_mode(e):
+    if e.event_type == "down" and e.name == "enter":
+        # Hentikan monitor mode di sini
+        print("Monitor mode telah dihentikan.")
+        keyboard.unhook_all()
 
 def main():
     print("1. Run with Proxy")
@@ -323,14 +324,11 @@ def main():
     else:
         print("Opsi yang Anda pilih tidak valid.")
 
-    # Buat thread untuk fungsi stop_monitor_mode()
-    monitor_thread = threading.Thread(target=stop_monitor_mode)
+    # Mendaftarkan fungsi stop_monitor_mode() sebagai handler saat tombol ditekan
+    keyboard.on_press(stop_monitor_mode)
 
-    # Mulai thread monitor
-    monitor_thread.start()
-
-    # Tunggu hingga thread monitor selesai
-    monitor_thread.join()
+    # Tunggu hingga tombol enter ditekan
+    keyboard.wait("enter")
 
     # Keluar dari program
     sys.exit(0)
@@ -338,3 +336,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+    

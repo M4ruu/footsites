@@ -7,14 +7,17 @@ from itertools import cycle
 import random
 import time
 
-url = 'https://www.invincible.id/collections/new-arrivals/products.json?limit=250'
+url = 'https://atmos.co.id/products.json?limit=250'
 discord_webhook_url = 'https://discord.com/api/webhooks/1109907397776003232/RPsTNW21a-58LFoy8VJ_1WzQkGRZgXr1CIG52R4gQVcyjy_gSoUnkEAfSG_MLR5mLxMF'
-data_file_path = 'inv.json'
+data_file_path = 'atmos.json'
 
 proxy_list = []
 # Read proxy list from proxy.txt file
 with open('proxy1.txt', 'r') as file:
     proxy_list = file.read().splitlines()
+
+
+
 
 def send_webhook_notification(embeds, proxy=None):
     payload = {'embeds': embeds}
@@ -48,7 +51,7 @@ def load_previous_products():
         with open(data_file_path, 'w') as file:
             json.dump([], file)
 
-    with open('inv.json', 'r') as file:
+    with open('atmos.json', 'r') as file:
         data = file.read()
         return json.loads(data)
 
@@ -91,10 +94,10 @@ def run_with_proxy():
                             available_sizes = [variant['option1'] for variant in variants if variant['available'] and variant['option1'].startswith('US ')]
 
                             if available_sizes:
-                                sizes_str = '\n'.join([f'[Size {size}](https://invincible.id/cart/{variant["id"]}:1)' for variant in variants for size in available_sizes if variant['option1'] == size])
+                                sizes_str = '\n'.join([f'[Size {size}](https://atmos.co.id/cart/{variant["id"]}:1)' for variant in variants for size in available_sizes if variant['option1'] == size])
                                 price = variants[0]['price']
                                 timestamp = datetime.now().strftime("%H:%M:%S")
-                                product_url = f'https://invincible.id/products/{product["handle"]}'
+                                product_url = f'https://atmos.co.id/products/{product["handle"]}'
                                 product_link = f'[Product Link]({product_url})'
 
                                 embeds = [
@@ -116,7 +119,7 @@ def run_with_proxy():
                             available_sizes = [variant['option1'] for variant in variants if variant['available'] and variant['option1'].startswith('US ')]
                             sizes_str = ', '.join(available_sizes) if available_sizes else 'No available sizes'
 
-                            product_url = f'https://invincible.id/products/{product["handle"]}'
+                            product_url = f'https://atmos.co.id/products/{product["handle"]}'
                             product_link = f'[Product Link]({product_url})'
 
                             embed = {
@@ -128,7 +131,7 @@ def run_with_proxy():
                             }
                             embeds.append(embed)
 
-                            sizes_str = '\n'.join([f'[Size {size}](https://invincible.id/cart/{variant["id"]}:1)' for variant in variants for size in available_sizes if variant['option1'] == size])
+                            sizes_str = '\n'.join([f'[Size {size}](https://atmos.co.id/cart/{variant["id"]}:1)' for variant in variants for size in available_sizes if variant['option1'] == size])
                             price = variants[0]['price']
                             timestamp = datetime.now().strftime("%H:%M:%S")
 
@@ -175,10 +178,10 @@ def run_without_proxy():
                             available_sizes = [variant['option1'] for variant in variants if variant['available'] and variant['option1'].startswith('US ')]
 
                             if available_sizes:
-                                sizes_str = '\n'.join([f'[Size {size}](https://invincible.id/cart/{variant["id"]}:1)' for variant in variants for size in available_sizes if variant['option1'] == size])
+                                sizes_str = '\n'.join([f'[Size {size}](https://atmos.co.id/cart/{variant["id"]}:1)' for variant in variants for size in available_sizes if variant['option1'] == size])
                                 price = variants[0]['price']
                                 timestamp = datetime.now().strftime("%H:%M:%S")
-                                product_url = f'https://invincible.id/products/{product["handle"]}'
+                                product_url = f'https://atmos.co.id/products/{product["handle"]}'
                                 product_link = f'[Product Link]({product_url})'
 
                                 embeds = [
@@ -201,7 +204,7 @@ def run_without_proxy():
                             available_sizes = [variant['option1'] for variant in variants if variant['available'] and variant['option1'].startswith('US ')]
                             sizes_str = ', '.join(available_sizes) if available_sizes else 'No available sizes'
 
-                            product_url = f'https://invincible.id/products/{product["handle"]}'
+                            product_url = f'https://atmos.co.id/products/{product["handle"]}'
                             product_link = f'[Product Link]({product_url})'
 
                             embed = {
@@ -213,13 +216,13 @@ def run_without_proxy():
                             }
                             embeds.append(embed)
 
-                            sizes_str = '\n'.join([f'[Size {size}](https://invincible.id/cart/{variant["id"]}:1)' for variant in variants for size in available_sizes if variant['option1'] == size])
+                            sizes_str = '\n'.join([f'[Size {size}](https://atmos.co.id/cart/{variant["id"]}:1)' for variant in variants for size in available_sizes if variant['option1'] == size])
                             price = variants[0]['price']
                             timestamp = datetime.now().strftime("%H:%M:%S")
 
                             embeds.append({
                                 'title': f'{title}\n\n' "New Product Restocked",
-                                'description': f'Atmos Monitor - Hari Ini: {timestamp}\n\n**{title}**\n\n**Price:** {price}\n\n**Available Sizes:**\n{sizes_str}',
+                                'description': f'Fetch: {timestamp}\n\n**{title}**\n\n**Price:** {price}\n\n**Available Sizes:**\n{sizes_str}',
                                 'url': product_url,
                                 'image': {'url': product['images'][0]['src']}
                             })

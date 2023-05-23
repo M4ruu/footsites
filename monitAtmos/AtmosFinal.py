@@ -48,7 +48,7 @@ def load_previous_products():
         with open(data_file_path, 'w') as file:
             json.dump([], file)
 
-    with open('atmos.json', 'r') as file:
+    with open(data_file_path, 'r', encoding='utf-8') as file:
         data = file.read()
         return json.loads(data)
 
@@ -105,7 +105,7 @@ def run_with_proxy():
                                     }
                                 ]
 
-                                send_webhook_notification(embeds)
+                                send_webhook_notification(embeds, proxy)
                                 time.sleep(3)  # 3-second delay
 
                 if restocked_products:
@@ -139,7 +139,7 @@ def run_with_proxy():
                                 'image': {'url': product['images'][0]['src']}
                             })
 
-                    send_webhook_notification(embeds)
+                    send_webhook_notification(embeds, proxy)
                     time.sleep(3)  # 3-second delay
 
                 else:
@@ -155,6 +155,91 @@ def run_with_proxy():
         except requests.exceptions.RequestException as e:
             print('Terjadi kesalahan saat melakukan request:', str(e))
 
+def run_without_proxy():
+    while True:
+        try:
+            response = requests.get(url)
+            if response.status_code == 200:
+                json_content = response.json()
+                current_products = json_content['products']
+
+                previous_products = load_previous_products()
+
+                new_products, restocked_products = compare_products(previous_products, current_products)
+
+                for product in new_products:
+                    if 'title' in product:
+                        title = product['title']
+                        if 'variants' in product and len(product['variants']) > 0:
+                            variants = product['variants']
+                            available_sizes = [variant['option1'] for variant in variants if variant['available'] and variant['option1'].startswith('US ')]
+
+                            if available_sizes:
+                                sizes_str = '\n'.join([f'[Size {size}](https://atmos.co.id/cart/{variant["id"]}:1)' for variant in variants for size in available_sizes if variant['option1'] == size])
+                                price = variants[0]['price']
+                                timestamp = datetime.now().strftime("%H:%M:%S")
+                                product_url = f'https://atmos.co.id/products/{product["handle"]}'
+                                product_link = f'[Product Link]({product_url})'
+
+                                embeds = [
+                                    {
+                                        'title': f'{title}\n\n' "New Product Loaded",
+                                        'description': f'Fetch: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}\n\n**{title}**\n\n**Price:** {price}\n\n**Available Sizes:**\n{sizes_str}',
+                                        'url': product_url,
+                                        'image': {'url': product['images'][0]['src']}
+                                    }
+                                ]
+
+                                send_webhook_notification(embeds, None)
+                                time.sleep(3)  # 3-second delay
+
+                if restocked_products:
+                    embeds = []
+                    for product in restocked_products:
+                        if 'variants' in product and len(product['variants']) > 0:
+                            variants = product['variants']
+                            available_sizes = [variant['option1'] for variant in variants if variant['available'] and variant['option1'].startswith('US ')]
+                            sizes_str = ', '.join(available_sizes) if available_sizes else 'No available sizes'
+
+                            product_url = f'https://atmos.co.id/products/{product["handle"]}'
+                            product_link = f'[Product Link]({product_url})'
+
+                            embed = {
+                                'title': f'{title}\n\n' "New Product Restocked",
+                                'description': f'**{product["title"]}**\n\n{product_link}',
+                                'fields': [
+                                    {'name': 'Available Sizes', 'value': sizes_str}
+                                ]
+                            }
+                            embeds.append(embed)
+
+                            sizes_str = '\n'.join([f'[Size {size}](https://atmos.co.id/cart/{variant["id"]}:1)' for variant in variants for size in available_sizes if variant['option1'] == size])
+                            price = variants[0]['price']
+                            timestamp = datetime.now().strftime("%H:%M:%S")
+
+                            embeds.append({
+                                'title': f'{title}\n\n' "New Product Restocked",
+                                'description': f'Atmos Monitor - Hari Ini: {timestamp}\n\n**{title}**\n\n**Price:** {price}\n\n**Available Sizes:**\n{sizes_str}',
+                                'url': product_url,
+                                'image': {'url': product['images'][0]['src']}
+                            })
+
+                    send_webhook_notification(embeds, None)
+                    time.sleep(3)  # 3-second delay
+
+                else:
+                    print('Tidak Ada Produk Restock')
+
+                save_current_products(current_products)
+
+            else:
+                print('Terjadi kesalahan saat fetching:', response.status_code)
+
+            time.sleep(3)  # 3-second delay before making the next request
+
+        except requests.exceptions.RequestException as e:
+            print('Terjadi kesalahan saat melakukan request:', str(e))
+11
 def run_without_proxy():
     while True:
         try:

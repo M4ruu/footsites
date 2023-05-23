@@ -307,19 +307,7 @@ def run_without_proxy():
         except requests.exceptions.RequestException as e:
             print('Terjadi kesalahan saat melakukan request:', str(e))
 
-def stop_monitor_mode():
-    # Hentikan monitor mode di sini
-    print("Monitor mode telah dihentikan.")
 
-def monitor_thread():
-    # Mendaftarkan fungsi stop_monitor_mode() sebagai handler saat tombol ditekan
-    keyboard.on_press_key("enter", lambda _: stop_monitor_mode())
-
-    # Tunggu hingga tombol enter ditekan
-    keyboard.wait("enter")
-
-    # Keluar dari program
-    sys.exit(0)
 
 def main():
     print("1. Run with Proxy")
@@ -333,14 +321,17 @@ def main():
     else:
         print("Opsi yang Anda pilih tidak valid.")
 
-    # Buat dan jalankan thread untuk memonitor tombol enter
-    monitor_thread = threading.Thread(target=monitor_thread)
-    monitor_thread.start()
+    # Mendaftarkan fungsi stop_monitor_mode() sebagai handler saat tombol ditekan
+    keyboard.on_press(stop_monitor_mode)
 
-    # Jalankan monitor mode di sini
-
-    # Tunggu hingga thread monitor selesai
-    monitor_thread.join()
-
+    # Tunggu hingga tombol enter ditekan
+    keyboard.wait("enter")
+    
+def stop_monitor_mode(e):
+    if e.event_type == "down" and e.name == "enter":
+        # Hentikan monitor mode di sini
+        print("Monitor mode telah dihentikan.")
+        sys.exit(0)
+        
 if __name__ == '__main__':
     main()

@@ -6,6 +6,7 @@ from datetime import datetime
 from itertools import cycle
 import random
 import time
+import sys
 
 url = 'https://atmos.co.id/products.json?limit=250'
 discord_webhook_url = 'https://discord.com/api/webhooks/1109907397776003232/RPsTNW21a-58LFoy8VJ_1WzQkGRZgXr1CIG52R4gQVcyjy_gSoUnkEAfSG_MLR5mLxMF'

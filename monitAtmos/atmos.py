@@ -237,7 +237,7 @@ def scrap():
                             print(f"Terjadi kesalahan saat mengirim product {product_title} ke Discord:", response.status_code)
                         
                         send_size_to_discord(get_available_products(product['id'], available_product_size))
-                        time.sleep(3)
+                        time.sleep(0.5)
 
                 save_product_data(current_products)
 

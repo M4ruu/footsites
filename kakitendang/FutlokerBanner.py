@@ -2,6 +2,7 @@ import time
 import requests
 import json
 from playwright.sync_api import sync_playwright
+import asyncio
 
 # Fungsi untuk membaca data JSON dari file
 def read_json_file(file_path):

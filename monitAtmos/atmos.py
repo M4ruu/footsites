@@ -5,15 +5,21 @@ import random
 import time
 import requests
 import locale
+from datetime import datetime
 
 session = requests.Session()
-url = 'https://www.invincible.id/products.json?limit=250'
-discord_webhook_url = 'https://discord.com/api/webhooks/1110180097954152450/z_TPYTH5Z0RhINc_yVaTOuURHaqsEA8Pi03wWQILNueCePEl1p_TePDblgLKL7V_8bTC'
-data_file_path = 'invin.json'
+url = 'https://atmos.co.id/products.json?limit=250'
+discord_webhook_url = 'https://discord.com/api/webhooks/1109907397776003232/RPsTNW21a-58LFoy8VJ_1WzQkGRZgXr1CIG52R4gQVcyjy_gSoUnkEAfSG_MLR5mLxMF'
+data_file_path = 'atmos.json'
 proxy_list = []
 
+proxy_list = []
+# Read proxy list from proxy.txt file
+with open('proxylist.txt', 'r') as file:
+    proxy_list = file.read().splitlines()
+
 def save_product_data(json_obj):
-    with open('invin.json', 'w') as file:
+    with open('atmos.json', 'w') as file:
         json.dump(json_obj, file, indent=4)
 
 def debug_json(json_obj):
@@ -80,7 +86,7 @@ def load_previous_products():
         with open(data_file_path, 'w') as file:
             json.dump([], file)
 
-    with open('invin.json', 'r') as file:
+    with open('atmos.json', 'r') as file:
         data = file.read()
         return json.loads(data)
     
@@ -98,12 +104,12 @@ def send_size_to_discord(product_sizes):
     product_price = product_sizes['price']
     product_size_url = []
     for i in range (len(product_sizes['available_size'])):
-        product_size_url.append(f"[Size {product_sizes['available_size'][i]}](https://invincible.id/cart/{product_sizes['variant_id'][i]}:1)")
+        product_size_url.append(f"[Size {product_sizes['available_size'][i]}](https://atmos.co.id/cart/{product_sizes['variant_id'][i]}:1)")
 
     product_size = '\n'.join(product_size_url)
 
     data = {
-        'username': 'Invin Scraper',
+        'username': 'Atmos Scraper',
         'avatar_url': 'https://i.ibb.co/svSBg3Z/Screenshot-2022-06-07-115600.png',
         'embeds': [
             {
@@ -120,13 +126,13 @@ def send_size_to_discord(product_sizes):
                     }
                 ],
                 'author': {
-                    'name': product_title, 
+                    'name': product_title,
                 },
                 'thumbnail': {
                     'url': product_image_url
                 },
                 'footer': {
-                    'text': 'Invin Scraper'
+                    'text': 'Atmos Scraper'
                 },
                 'timestamp': time.strftime('%Y-%m-%dT%H:%M:%S')
             }
@@ -156,7 +162,7 @@ def scrap():
                     print('Sending to Discord...')
                     for product in new_products:
                         product_title = product['title']
-                        product_url = f"https://invincible.id/products/{product['handle']}"
+                        product_url = f"https://atmos.co.id/products/{product['handle']}"
                         product_image_url = product['images'][0]['src']
                         product_price = product['variants'][0]['price']
 
@@ -197,7 +203,7 @@ def scrap():
                     print('Sending to Discord...')
                     for product in new_products:
                         product_title = product['title']
-                        product_url = f"https://invincible.id/products/{product['handle']}"
+                        product_url = f"https://atmos.co.id/products/{product['handle']}"
                         product_image_url = product['images'][0]['src']
                         product_price = product['variants'][0]['price']
 
@@ -231,7 +237,7 @@ def scrap():
                             print(f"Terjadi kesalahan saat mengirim product {product_title} ke Discord:", response.status_code)
                         
                         send_size_to_discord(get_available_products(product['id'], available_product_size))
-                        time.sleep(2)
+                        time.sleep(3)
 
                 save_product_data(current_products)
 

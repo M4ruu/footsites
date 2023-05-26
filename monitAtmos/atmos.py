@@ -210,7 +210,7 @@ def scrap():
                         data = {
                             'username': 'CuanCuanCuan',
                             'avatar_url': 'https://i.ibb.co/svSBg3Z/Screenshot-2022-06-07-115600.png',
-                            'content': 'New Product!',
+                            'content': 'Restocked Product!',
                             'embeds': [
                                 {
                                     'title': 'Product Link',
@@ -229,7 +229,7 @@ def scrap():
                                 }
                             ]
                         }
-
+                        print(data)
                         response = session.post(discord_webhook_url, json=data)
                         if response.status_code == 204:
                             print(f"Product {product_title} sent to Discord!")

@@ -9,15 +9,20 @@ import locale
 session = requests.Session()
 url = 'https://atmos.co.id/collections/new-arrivals/products.json?limit=250'
 discord_webhook_url = 'https://discord.com/api/webhooks/1111512598903521311/JUnhE8bq9vQ23GO9C8IVixGWQFQEad-oH6yuT1kf_-wggLDkBlCCNJ8u8b5G9Ogs3CfN'
-data_file_path = 'atmos.json'
+data_file_path = 'atmosnew.json'
 proxy_list = []
 
+proxy_list = []
+# Read proxy list from proxy.txt file
+with open('proxy1.txt', 'r') as file:
+    proxy_list = file.read().splitlines()
+
 def save_product_data(json_obj):
-    with open('atmos.json', 'w') as file:
+    with open('atmosnew.json', 'w') as file:
         json.dump(json_obj, file, indent=4)
 
 def debug_json(json_obj):
-    with open('debug.json', 'w') as file:
+    with open('debugnew.json', 'w') as file:
         json.dump(json_obj, file, indent=4)
 
 def rupiah_format(angka, with_prefix=False, desimal=0):
@@ -80,7 +85,7 @@ def load_previous_products():
         with open(data_file_path, 'w') as file:
             json.dump([], file)
 
-    with open('atmos.json', 'r') as file:
+    with open('atmosnew.json', 'r') as file:
         data = file.read()
         return json.loads(data)
     
@@ -195,7 +200,7 @@ def scrap():
                 if len(restocked_products) > 0:
                     print('Restocked products found!')
                     print('Sending to Discord...')
-                    for product in new_products:
+                    for product in restocked_products:
                         product_title = product['title']
                         product_url = f"https://atmos.co.id/products/{product['handle']}"
                         product_image_url = product['images'][0]['src']
@@ -204,7 +209,7 @@ def scrap():
                         data = {
                             'username': 'CuanCuanCuan',
                             'avatar_url': 'https://i.ibb.co/svSBg3Z/Screenshot-2022-06-07-115600.png',
-                            'content': 'New Product!',
+                            'content': 'Restocked Product!',
                             'embeds': [
                                 {
                                     'title': 'Product Link',

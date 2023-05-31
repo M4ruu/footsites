@@ -78,7 +78,7 @@ def compare_products(previous_products, current_products):
 
 
             
-    debug_json(available_product_size)
+    # debug_json(available_product_size)
     return new_products, restocked_products, available_product_size
 
 def load_previous_products():
@@ -196,12 +196,12 @@ def scrap():
                             print(f"Terjadi kesalahan saat mengirim product {product_title} ke Discord:", response.status_code)
                         
                         send_size_to_discord(get_available_products(product['id'], available_product_size))
-                        time.sleep(3)
+                        time.sleep(5)
 
                 if len(restocked_products) > 0:
                     print('Restocked products found!')
                     print('Sending to Discord...')
-                    for product in new_products:
+                    for product in restocked_products:
                         product_title = product['title']
                         product_url = f"https://atmos.co.id/products/{product['handle']}"
                         product_image_url = product['images'][0]['src']
@@ -237,14 +237,14 @@ def scrap():
                             print(f"Terjadi kesalahan saat mengirim product {product_title} ke Discord:", response.status_code)
                         
                         send_size_to_discord(get_available_products(product['id'], available_product_size))
-                        time.sleep(0.5)
+                        time.sleep(5)
 
                 save_product_data(current_products)
 
             else:
                 print('Terjadi kesalahan saat fetching:', response.status_code)
 
-            time.sleep(3)  # 3-second delay before making the next request
+            time.sleep(5)  # 3-second delay before making the next request
 
         except requests.exceptions.RequestException as e:
             print('Terjadi kesalahan saat melakukan request:', str(e))
